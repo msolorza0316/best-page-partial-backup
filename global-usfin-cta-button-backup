@@ -1,0 +1,41 @@
+  {% set USCCF_exceptions = ["834331ec-1230-48a7-9c65-eb9aafd007cd", "75aee4ca-04a5-4056-aa7a-12493a4d384d", "4540873a-b2e2-44db-8b1b-4cd796f4b750", "b7d8aad0-f9ff-4fbd-990b-0f950e1049e5", "ebac17b9-dbda-4b4d-a63e-ea2fb84b7d84", "5bd443cb-7657-4fe1-9afe-c7dc694947a0", "03b0193a-4386-4eb0-94dd-9c6d7a047310"] %}
+{% if product.GENERAL.HIDE_REDIRECT_CTA.rawValue == false %}
+     {% if product.GENERAL.ID in USCCF_exceptions %}
+          {% set noCtaButton = false %}
+          {% if niche.code == "USCCF" %}
+            {% if product.GENERAL.CTA_TEXT.decoratedValue != "" %}
+              {% set ctaText = product.GENERAL.CTA_TEXT.decoratedValue %}
+              {% set noCtaButton = true %}
+            {% elseif provider.GENERAL.CTA_TEXT.decoratedValue != "" %}
+                {% set ctaText = provider.GENERAL.CTA_TEXT.decoratedValue %}
+            {% elseif product.GENERAL.PROVIDER_NAME_CTA == "Yes" %}
+                {% set ctaText = nicheProperties.CTA_TEXT %}
+            {% else %}
+                {% set ctaText =  'Apply now' %}
+            {% endif %}
+      {% endif %}
+      <a href="redirect://{{ redirectSlug }}" target="_blank" style="margin-top: .5rem; font-size: 1.5em;" rel="sponsored" class="luna-button {{ (noCtaButton) ? 'no-cta-button' : 'luna-button--success luna-button--fluid' }}" type="button">{{ ctaText }}</a>
+{% else %}
+<a class="luna-button luna-button--success {% if parameters.MASTHEAD !="" %} luna-button--fluid {% elseif parameters.SPONCON !="" %}{% else %} luna-button--fluid luna-button--large{% endif %} {{ parameters.CSS_CLASS }}" style="border-radius: 0.2em;" title="Go to {{ provider.GENERAL.NAME }}" rel="sponsored" target="_blank" href="redirect://{{ redirectSlug }}">
+{% if parameters.CTA_OVERRIDE !="" %}
+{{ parameters.CTA_OVERRIDE }}
+{% elseif parameters.SPONCON !="" %}
+Learn more
+{% elseif provider.GENERAL.CTA_TEXT !="" %}
+{{ provider.GENERAL.CTA_TEXT}}
+{% else %}
+{{ nicheProperties.CTA_TEXT }}
+{% endif %}
+</a>
+{% endif %}
+{% if parameters.SPONCON !="" %}
+{% else %}
+<center><span style="font-size: 14px; font-weight: 500;  {% if parameters.MASTHEAD !="" %}color: #FFF;{% else %}color: #6c7881;{% endif %} white-space: normal;">on {{ provider.GENERAL.NAME }}'s secure site</span></center>
+{% endif %}
+{% elseif product.LINKS.PRODUCT_PAGE_URL != "" %}
+<a class="luna-button luna-button--primary {% if parameters.MASTHEAD !="" %} luna-button--fluid {% elseif parameters.SPONCON !="" %}{% else %} luna-button--fluid luna-button--large{% endif %} {{ parameters.CSS_CLASS }}" style="border-radius: 0.2em;" title="Read {{ product.GENERAL.NAME }} review" href="{{ product.LINKS.PRODUCT_PAGE_URL }}" role="button">Read review</a>
+{% endif %}
+      {# RATES AND FEES FOR CREDIT CARDS ONLY #}
+{% if product.DETAILS.PDS_URL.rawValue | length > 0 and niche.code == 'USCCF' and ( provider.DETAILS.SHOW_RATES_AND_FEES_LINK.rawValue == true ) %}
+  <center><span style="font-size: 12px; white-space: normal; {% if parameters.MASTHEAD !="" %}color: #FFF !important;{% endif %}">Terms apply, see <a class="h_hero_tc rates-and-fees" style="text-decoration: none;" rel="nofollow" target="_blank" href="{{ product.DETAILS.PDS_URL.decoratedValue }}" rel="noreferrer">rates & fees</a></span></center>
+  {% endif %} 
