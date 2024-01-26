@@ -1,0 +1,196 @@
+{% set uniqueId = product_id|replace({'-': ""}) %}
+<div class="best-page" id="best-page-{{uniqueId}}-{{category}}-{{random()}}">
+
+<style>.bestpage_infobox tr {display: flex; flex-direction: column-reverse; padding-bottom: 15px; background-image: url(https://www.finder.com/finder-us/wp-uploads/2021/02/Finder-SitesLike-BlackBullet-20px.png); background-repeat: no-repeat; padding-left: 30px; background-position-y: 10px; } .bestpage_infobox th { border-bottom: 0 none #d5d9dc; width: auto; padding: 0; font-size: .9em; font-weight: 500; } .bestpage_infobox td { border-bottom: 0 none #d5d9dc; font-size: 1.2em; padding: 0; } .bestpage_card { border-width: .1em; border-style: solid; border-radius: .5em; .bestpage_card-promoted { border: #93c5fd; border-width: .15em; border-style: solid; border-radius: .5em; } .best-pagePromoted-div { margin-bottom: -.8em; z-index: 9; position: relative; margin-left: 2em; } .best-pagePromoted-span { font-size: 0.7em; font-weight: 700; background-color: #f6c744; border-radius: 1em; padding-left: 0.8em; padding-right: 0.8em; padding-top: 0.4em; padding-bottom: 0.4em; } .best-pageTopPick-div { margin-bottom: -.8em; z-index: 9; position: relative; margin-left: 2em; } .best-pageTopPick-span { color: #fff; font-size: 0.7em; font-weight: 700; background-color: #0271e1; border-radius: 1em; padding-left: 0.8em; padding-right: 0.8em; padding-top: 0.4em; padding-bottom: 0.4em; } .hotstatText { font-size: 0.7em; } .luna-accordion__details.in.collapse { overflow: visible; } div.popover.fade.bottom.in { white-space: normal; } .bestpage_card { overflow: visible; } .popover-content { word-wrap: break-word; } .sign-up-reqs { font-size: 0.9rem !important; } .has-margin-bottom-xsmall.offertext { color: #000 !important; border-radius: 0.2em !important; font-size: 0.9em }</style>
+
+<style>
+.tool-tip-sec { font-size: 0.9em; }
+
+@media (max-width:601px)  { 
+.tool-tip-sec { font-size: 0.8em; }
+}
+
+</style>
+
+
+{% if product_id !="" %}{% set productID = product_id %}{% endif %}
+{% if niche_code !="" %}{% set nicheID = niche_code %}{% endif %}
+{% if type !="" %}{% set infoboxtype = type %}{% endif %}
+{% if best_page !="" %}{% set isbestpage = best_page %}{% endif %}
+
+{% set promo_text = do_shortcode_twig('[nb:value niche_code="' ~ nicheID ~ '" record_type="PRODUCT" record_id="' ~ productID ~ '" field="DESCRIPTIONS.OFFER_TERMS" decorator="GLOBAL.VALUE.TABLE_OFFER" CSS="offertext"]') %}
+
+{% set promoted = do_shortcode_twig('[nb:value  niche_code="' ~ nicheID ~ '" record_type="PRODUCT" record_id="' ~ productID ~ '" field="GENERAL.SPONSORED" decorator="GLOBAL.VALUE.BOOLEAN"]') %} 
+
+{% if custom_infobox =="" %}
+{% set infobox = do_shortcode_twig('[infobox site="' ~ nicheID ~ '" fieldset="bestpage" origin="straightforward-niche" id="' ~ productID ~ '"]') %}
+{% set infobox_hotstats = do_shortcode_twig('[infobox site="' ~ nicheID ~ '" fieldset="bestpage_hotstats" origin="straightforward-niche" id="' ~ productID ~ '"]') %}
+{% elseif custom_infobox !='' %}
+{% set box = custom_infobox %}
+{% set infobox = do_shortcode_twig('[infobox site="' ~ nicheID ~ '" fieldset="bestpageretirement" origin="straightforward-niche" id="' ~ productID ~ '"]') %}
+{% set infobox_hotstats = do_shortcode_twig('[infobox site="' ~ nicheID ~ '" fieldset="bestpageretirement" origin="straightforward-niche" id="' ~ productID ~ '"]') %}
+{% endif %}
+
+{% if type !="" %}
+{% set typeinfobox = do_shortcode_twig('[infobox site="' ~ nicheID ~ '" fieldset="bestpage_' ~ infoboxtype ~ '" origin="straightforward-niche" id="' ~ productID ~ '"]') %}
+
+{% if typeinfobox|split('<tr>')|length > 1 %}{% set infobox = typeinfobox %}{% endif %}
+{% set typeinfobox_hotstats = do_shortcode_twig('[infobox site="' ~ nicheID ~ '" fieldset="bestpage_hotstats_' ~ infoboxtype ~ '" origin="straightforward-niche" id="' ~ productID ~ '"]') %}
+   {% if typeinfobox_hotstats|split('<tr>')|length > 1 %}{% set infobox_hotstats = typeinfobox_hotstats %}{% endif %}
+     {% elseif custom_infobox != "" and infobox_hotstats !="" %}
+     {% set infobox = do_shortcode_twig('[infobox site="' ~ nicheID ~ '" fieldset="' ~ custom_hotstats ~ '" origin="straightforward-niche" id="' ~ productID ~ '"]') %}
+     {% set infobox_hotstats = do_shortcode_twig('[infobox site="' ~ nicheID ~ '" fieldset="' ~ custom_hotstats ~ '" origin="straightforward-niche" id="' ~ productID ~ '"]') %}
+   {% endif %}
+
+<div>
+{% if promoted == "Yes" %}
+<div class="best-pagePromoted-div"><span class="best-pagePromoted-span">PROMOTED</span></div>
+{% elseif toppick|upper == "TRUE" %}
+<div class="best-pageTopPick-div"><span class="best-pageTopPick-span">TOP PICK</span></div>
+{% endif %}
+<article class="luna-card luna-card--border {% if promoted == "Yes" %}luna-card--shadow bestpage_card-promoted{% elseif toppick|upper == "TRUE" %}luna-card--shadow bestpage_card-promoted{% else %}bestpage_card{% endif %}">
+<div class="luna-card__block" style="padding: 0; margin: 0;">
+<div class="u-grid" style="margin:0;">
+<div class="u-grid__col u-3/4@m u-2/3@s" style="padding: 0.9rem;">
+
+{# MAIN SECTION - TITLE, RATING AND TABS #}
+<div class="u-grid u-grid--alignMiddle">
+<div class="u-grid__col u-1/4@m u-1/3" style="padding-bottom:0.5em">
+<center>{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.USFIN_IMAGE"]') }}</center>
+</div>
+<div class="u-grid__col u-3/4@m u-2/3" style="padding-bottom:0.5em">
+<p style="margin-bottom:0; font-size: 1.2em; font-weight: 700;" id="{{ productID }}"><strong>
+{{ do_shortcode_twig('[nb:value niche_code="' ~ nicheID ~ '" record_type="PRODUCT" record_id="' ~ productID ~ '" field="GENERAL.NAME" decorator="GLOBAL.VALUE.TEXT"]') }}
+</strong></p>
+
+{% if hide_score !="" %}
+{% else %}
+<div class="u-grid u-grid--alignMiddle u-grid--gutterSmall">
+  <div class="u-grid__col u-1/6@s u-1/2">
+<span class="aligncenter" style="font-weight: 1000; color:#000; font-size: 1.6em;">{{ do_shortcode_twig('[nb:product niche_code="' ~ niche_code ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.USFIN_STAR_RATINGS" TYPE="RATINGS" REVIEW="True"]') }}</span>
+  </div>
+  <div class="u-grid__col u-3/4@s u-1/2 ">
+<span>{{ do_shortcode_twig('[nb:product niche_code="' ~ niche_code ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.USFIN_STAR_RATINGS" TYPE="STARS" STARS="BLUE" BEST="True"]') }}</span>
+<p class="tool-tip-sec"style=" font-weight: 500;">{{ do_shortcode_twig('[nb:product niche_code="' ~ niche_code ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.DATAPOINT_FINDER_SCORE_TOOLTIP_S"]') }}</p>
+  </div>
+  </div>
+{% endif %}
+
+</div>
+{% if promo_text != '' %}
+<div class="u-grid__col u-1/1@m u-1/1@s" style="padding-bottom:0.5em; color: black !important; font-size: 0.9em; font-weight: 300 !important;">
+{{ promo_text }}
+</div>
+{% endif %}
+
+
+<div class="u-grid__col u-1/1 is-hidden@s is-visible" style="padding-top: 1em; padding-bottom: 1em;">
+{# SECOND SECTION - CTA (MOBILE ONLY) #}
+{# Added by Zak K on Sep 7, please adjust accordingly #}
+<center>
+{% if cta_override != '' and cta_id_override != '' %}
+{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ cta_id_override ~ '" decorator="GLOBAL.PRODUCT.USFIN_REDIRECT_BUTTON" BEST_PAGE="TRUE" CTA_OVERRIDE="' ~ cta_override ~ '"]') }}
+{% else %}
+{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.USFIN_REDIRECT_BUTTON" BEST_PAGE="TRUE"]') }}
+{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.USFIN_ON_SITE_TEXT" ]') }}
+{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.READ_REVIEW_CTA" ]') }}
+
+{% endif %}
+</center>
+{# End of additions #}
+</div>
+<div class="u-grid__col u-1/1">
+{# DESCRIPTION AND ACCORDION SECTION #}
+
+{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.SITES_LIKE_DESC" DESC="' ~  desc ~ '"]') }}
+{% if custom_infobox !='' %}
+{{ custom_infobox }} 
+{% endif %}
+{% if niche_code == "USFPL" %}
+{% set StateAvailability = do_shortcode_twig('[nb:value niche_code="USFPL" record_type="PRODUCT" record_id="' ~ productID ~ '" field="DETAILS.STATES_SERVICED" decorator="USFPL.VALUE.TEST_STATE_AVAILABILITY"]') %}
+{% if StateAvailability == null %}
+{% elseif StateAvailability != null %}
+<ul style="padding-top:1em;"><li><strong>{{ StateAvailability }}</strong></li></ul>
+{% endif %}
+{% endif %}
+
+{% if niche_code == "USFSL" %}
+{% set StateAvailabilitySL = do_shortcode_twig('[nb:value niche_code="USFSL" record_type="PRODUCT" record_id="' ~ productID ~ '" field="DETAILS.STATES_SERVICED" decorator="USFSL.VALUE.TEST_STATE_AVAILABILITY"]') %}
+{% if StateAvailabilitySL == null %}
+{% elseif StateAvailabilitySL != null %}
+<ul style="padding-top:1em;"><li><strong>{{ StateAvailabilitySL }}</strong></li></ul>
+{% endif %}
+{% endif %}
+
+
+<ul class="luna-accordionGroup accordionGroup">
+{% if pros != "" or cons != "" %}
+{% set random_number = random() %}
+<li class="luna-accordion" data-accordion="accordion">
+<div class="luna-accordion__summary">
+<p class="luna-accordion__heading">  
+<button class="luna-accordion__action collapsed" aria-expanded="false" aria-controls="accordion{{random_number}}" data-toggle="collapse" data-target="#accordion{{random_number}}">
+        <span class="luna-accordion__title">Pros and cons</span>
+        <svg class="luna-icon" aria-hidden="true"><use xlink:href="#add" data-accordion-icon="show"></use><use xlink:href="#remove"></use></svg></button>
+    </p>
+  </div>
+  <div class="luna-accordion__details collapse" aria-hidden="true" id="accordion{{random_number}}" data-accordion="details">
+    <div class="accordionContent">{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.SITES_LIKE_PROS_CONS" PROS="' ~ pros|replace({"'":"'"})|replace({"'":"'"}) ~ '" CONS="' ~ cons|replace({"'":"'"})|replace({"'":"'"}) ~ '"]') }}</div>
+  </div>
+</li>
+{% endif %}
+{% if infobox is not empty %} 
+{% set random_number = random() %}
+<li class="luna-accordion" data-accordion="accordion">
+<div class="luna-accordion__summary">
+    <p class="luna-accordion__heading">
+      <button class="luna-accordion__action collapsed" aria-expanded="false" aria-controls="accordion{{random_number}}" data-toggle="collapse" data-target="#accordion{{random_number}}">
+        <span class="luna-accordion__title">More details</span>
+        <svg class="luna-icon" aria-hidden="true"><use xlink:href="#add" data-accordion-icon="show"></use><use xlink:href="#remove"></use></svg></button>
+    </p>
+  </div>
+  <div class="luna-accordion__details collapse" aria-hidden="true" id="accordion{{random_number}}" data-accordion="details">
+    <div class="accordionContent">{{ infobox }}</div>
+  </div>
+</li>
+{% endif %}  
+</ul>
+
+
+{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.DATAPOINT_USDISCLAIMER_XS"]') }}
+</div>
+</div>
+{# SECOND SECTION - HOTSTATS AND CTA (DESKTOP AND TABLET) #}
+</div>
+<div class="u-grid__col u-1/4@m u-1/3@s is-hidden is-visible@s" style="background-color: #F2F8FD; padding: 1.25rem calc(1.25rem - 1px)">
+<div data-category="" data-niche="{{ nicheID }}" data-fieldset="default" class="{{ nicheID }} default bestpage_infobox">
+{{ infobox_hotstats }}
+</div>
+<center>
+
+{% if cta_override != '' and cta_id_override != '' %}
+{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ cta_id_override ~ '" decorator="GLOBAL.PRODUCT.USFIN_REDIRECT_BUTTON" BEST_PAGE="TRUE" CTA_OVERRIDE="' ~ cta_override ~ '"]') }}
+{% else %}
+{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.USFIN_REDIRECT_BUTTON" BEST_PAGE="TRUE"]') }}
+{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.USFIN_ON_SITE_TEXT"]') }}
+{{ do_shortcode_twig('[nb:product niche_code="' ~ nicheID ~ '" record_type="PRODUCT" id="' ~ productID ~ '" decorator="GLOBAL.PRODUCT.READ_REVIEW_CTA" ]') }}
+
+
+{% endif %}
+
+{% set fdic_insured = do_shortcode_twig('[nb:value  niche_code="' ~ nicheID ~ '" record_type="PRODUCT" record_id="' ~ productID ~ '" field="DETAILS.FDIC_INSURANCE" decorator="GLOBAL.VALUE.BOOLEAN"]') %} 
+{% if fdic_insured == "Yes" %}
+<div><span class="material-symbols-outlined">verified_user</span> <strong class="fdic-text text-x-small">FDIC Insured</strong></div>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<style>.material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 10; } .material-symbols-outlined { font-size: 15px; } .fdic-text { padding-left: 5px; }</style>
+{% endif %}
+
+</center>
+
+</div>
+</div>
+</div>
+</article>
+</div>
+
+</div>
